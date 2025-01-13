@@ -5,20 +5,18 @@ using UnityEngine;
 public class FirstScript : MonoBehaviour
 {
 
-    float speed; 
+    public float speed = 0.1f;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        speed = Random.Range(0.01f, 0.03f) ;
+    void Start() {
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector2 pos = transform.position;
-        pos.x += speed;
-
+        //keep consistency
+        pos.x += speed * Time.deltaTime;
 
         //1st method/////////////////////////////////////////////////////////////
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
@@ -30,18 +28,32 @@ public class FirstScript : MonoBehaviour
         //what we test on left
         Vector2 screenZeroInWorld = Camera.main.ScreenToWorldPoint(Vector2.zero);
 
-        if (pos.x > screenSizeInWorld.x || pos.x < screenZeroInWorld.x)
+        if (pos.x > screenSizeInWorld.x)
         {
+            Vector3 fixedPos = new Vector3(screenSizeInWorld.x, 0, 0);
+            pos.x  = fixedPos.x;
+            speed *= -1;
+        }
+        if (pos.x < screenZeroInWorld.x) {
+            Vector3 fixedPos = new Vector3(screenZeroInWorld.x, 0, 0);
+            pos.x = fixedPos.x;
             speed *= -1;
         }
         //////////////////////////////////////////////////////////////////////////
-   
+
         /* 2nd method/////////////////////////////////////////////////////////////
          * 
          * transform the square pos in world to screen
          * Vector2 squareScreenPos = Camera.main.WorldToScreenPoint(pos);
          * 
-         * if(squareScreenPos.x < 0 || squareScreenPos.x > Screen.width){
+         * if(squareScreenPos.x < 0){
+         *   Vector3 fixedPos = new Vector3(0, 0, 0);
+         *   pos.x  = Camera.main.ScreenToWorldPoint(fixedPos).x;
+         *   speed *= -1;
+         * }
+         * if(squareScreenPos.x > Screen.width){
+         *   Vector3 fixedPos = new Vector3(Screen.width, 0, 0);
+         *   pos.x = Camera.main.ScreenToWorldPoint(fixedPos).x;
          *   speed *= -1;
          * }
          *////////////////////////////////////////////////////////////////////////
