@@ -10,6 +10,7 @@ public class movement : MonoBehaviour
     public AnimationCurve curveY;
     public AnimationCurve curveZ;
     [Range(0, 1)] public float t;
+    private bool startCount = false;
 
     void Start()
     {
@@ -21,6 +22,7 @@ public class movement : MonoBehaviour
     {
         //move circle
         Vector3 pos = transform.position;
+        Vector3 rot = transform.eulerAngles;
         pos.z = 0;
         pos.x += speed * Time.deltaTime;
 
@@ -43,20 +45,24 @@ public class movement : MonoBehaviour
 
 
         //get the space input
-        if (Input.GetKey(KeyCode.Space))
-        {
-            t += Time.deltaTime;
-            if (t > 1)
-            {
-                t = 0;
-            }
-
-            pos.y = curveY.Evaluate(t);
-            pos.z = curveZ.Evaluate(t);
-
+        if (Input.GetKey(KeyCode.Space)) { 
+            startCount = true;
         }
 
+        if (startCount == true) {
+            t += Time.deltaTime;
+            if (t > 1) {
+                t = 0;
+                startCount = false;
+            }
+        }
+
+        pos.y = Vector2.one.y * curveY.Evaluate(t);
+        rot.z = Vector3.one.z * curveZ.Evaluate(t);
+
+
         transform.position = pos;
+        transform.eulerAngles = rot;
 
     }
 }
