@@ -31,7 +31,7 @@ public class BirdMovement : MonoBehaviour
         
         //change it back to the bird position
         pos += direction * speed * Time.deltaTime;
-        transform.position = pos;
+        transform.position = pos;   
 
 
     }
