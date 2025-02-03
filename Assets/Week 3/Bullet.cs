@@ -1,22 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 5;
-    public bool hasBeenFired = false;
+    public float speed = 5f;
+    public bool isFired = false;
+
+    public SpriteRenderer sr;
+
+    private void Start() {
+        sr.color = Random.ColorHSV();  
+    }
+
     void Update()
     {
-        if(hasBeenFired == true)
+
+        if (isFired)
         {
             Movement();
-        }
-        else
+        }else
         {
             PointAtMouse();
         }
-        
     }
 
     void PointAtMouse()
@@ -26,6 +33,15 @@ public class Bullet : MonoBehaviour
         Vector2 direction = mouse - transform.position;
 
         transform.up = direction;
+    }
+
+
+
+    public void Fire()
+    {
+        isFired = true;
+        transform.parent = null;
+        Destroy(gameObject, 5f);
     }
 
     void Movement()

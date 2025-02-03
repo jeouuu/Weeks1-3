@@ -4,36 +4,39 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
-    public GameObject prefab;
-    public Bullet bullet;
+    public GameObject bulletPrefab;
+    public Bullet currentBullet;
 
     void Start()
     {
-        Spawn();
     }
 
     void Update()
-    {
-        if(bullet == null)
+    {  
+
+        if (Input.GetKeyDown(KeyCode.Space) && currentBullet == null) 
         {
             Spawn();
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && currentBullet != null)
         {
-            Fire();
+            currentBullet.Fire();
+            currentBullet = null;
         }
+        
+
     }
 
     void Spawn()
     {
-        GameObject bulletGo = Instantiate(prefab);
-        bullet = bulletGo.GetComponent<Bullet>();
+        GameObject newBullet = Instantiate(bulletPrefab,transform);
+        currentBullet = newBullet.GetComponent<Bullet>(); 
     }
 
-    void Fire()
-    {
-        bullet.hasBeenFired = true;
-        bullet = null;
-    }
+    //void Fire()
+    //{
+    //    bullet.hasBeenFired = true;
+    //    bullet = null;
+    //}
 }
